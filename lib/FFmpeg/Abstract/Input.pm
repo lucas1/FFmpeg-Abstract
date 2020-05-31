@@ -15,6 +15,11 @@ has 'path_input' => (
     is => 'ro'
 );
 
+# force format input
+has 'format_input' => (
+    is => 'ro'
+);
+
 sub input {
     my $self = shift;
 
@@ -29,6 +34,30 @@ sub input {
         $file .= $_;
 
         push(@{$self->_input}, $file);
+    }
+}
+
+sub t_input {
+    my ($self, $value) = @_;
+
+    if ($self->_valid_time($value)) {
+        
+    }
+}
+
+sub to_input {
+    my ($self, $value) = @_;
+
+    if ($self->_valid_time($value)) {
+
+    }
+}
+
+sub ss_input {
+    my ($self, $value) = @_;
+
+    if ($self->_valid_time($value)) {
+        
     }
 }
 
