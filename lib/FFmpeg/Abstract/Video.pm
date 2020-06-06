@@ -14,7 +14,7 @@ has '_video' => (
 sub video_bitrate {
     my ($self, $value) = @_;
 
-    push(@{$self->_video}, ' -b:a ' . $value) if $self->_valid_prefix($value);
+    push(@{$self->_video}, ' -b:v ' . $value) if $self->_valid_prefix($value);
 }
 
 sub video_min_rate {
