@@ -7,6 +7,7 @@ with qw/
     FFmpeg::Abstract::Input
     FFmpeg::Abstract::Output
     FFmpeg::Abstract::Options
+    FFmpeg::Abstract::Video
 /;
 
 has 'ffmpeg' => (
