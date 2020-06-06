@@ -11,6 +11,16 @@ has '_video' => (
     }  
 );
 
+has '_video_tmp' => (
+    is => 'ro',
+    isa => sub {
+        die 'Attribute _video_tmp is private!' unless ref($_[0]) eq 'HASH' && keys %{$_[0]} == 0
+    },
+    default => sub {
+        {}
+    }  
+);
+
 sub video_bitrate {
     my ($self, $value) = @_;
 
@@ -44,18 +54,41 @@ sub moov_size {
 sub mov_flags {
     my ($self, $value) = (shift, shift);
 
-    push(@{$self->_video}, ' -movflags ' . $value) if $value;
+    if ($self->_valid_mov_flags($value)) {
+        push(@{$self->_video}, ' -movflags ' . $value) if $value;
 
-    if ($value eq 'frag_keyframe') {
-        push(@{$self->_video}, ' -frag_duration ' . $_[0]) if $_[0];
-        push(@{$self->_video}, ' -frag_size ' . $_[1]) if $_[1];
-    } elsif ($value eq 'frag_custom') {
-        push(@{$self->_video}, ' -min_frag_duration ' . $_[0]) if $_[0];
-    } elsif ($value eq 'default_base_moof') {
-        push(@{$self->_video}, ' -write_tmcd ' . $_[0]) if $_[0];
-    } elsif ($value eq 'negative_cts_offsets') {
-        push(@{$self->_video}, ' -write_prft ' . $_[0]) if $_[0];
+        if ($value eq 'frag_keyframe') {
+            push(@{$self->_video}, ' -frag_duration ' . $_[0]) if $_[0];
+            push(@{$self->_video}, ' -frag_size ' . $_[1]) if $_[1];
+        } elsif ($value eq 'frag_custom') {
+            push(@{$self->_video}, ' -min_frag_duration ' . $_[0]) if $_[0];
+        } elsif ($value eq 'default_base_moof') {
+            push(@{$self->_video}, ' -write_tmcd ' . $_[0]) if $_[0];
+        } elsif ($value eq 'negative_cts_offsets') {
+            push(@{$self->_video}, ' -write_prft ' . $_[0]) if $_[0];
+        }
     }
+}
+
+sub _valid_mov_flags {
+    my $value = $_[1];
+
+    if ($value) {
+        return 1 if $value =~ /^frag_keyframe$/;
+        return 1 if $value =~ /^frag_custom$/;
+        return 1 if $value =~ /^empty_moov$/;
+        return 1 if $value =~ /^separate_moof$/;
+        return 1 if $value =~ /^skip_sidx$/;
+        return 1 if $value =~ /^faststart$/;
+        return 1 if $value =~ /^rtphint$/;
+        return 1 if $value =~ /^disable_chpl$/;
+        return 1 if $value =~ /^omit_tfhd_offset$/;
+        return 1 if $value =~ /^default_base_moof$/;
+        return 1 if $value =~ /^negative_cts_offsets$/;
+    }
+
+    return 0;
+    
 }
 
 1;
