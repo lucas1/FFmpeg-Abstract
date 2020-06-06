@@ -34,4 +34,11 @@ sub _valid_time {
     return 0;
 }
 
+sub _valid_prefix {
+    my ($self, $value) = @_;
+
+    return $value && 
+           $value =~ /^\d+(?:y|z|a|f|p|n|u|m|c|d|h|k|K|M|G|T|P|E|Z|Y)$/ ? 1 : 0;
+}
+
 1;

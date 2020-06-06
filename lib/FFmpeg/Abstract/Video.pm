@@ -11,4 +11,28 @@ has '_video' => (
     }  
 );
 
+sub video_bitrate {
+    my ($self, $value) = @_;
+
+    push(@{$self->_video}, ' -b:a ' . $value) if $self->_valid_prefix($value);
+}
+
+sub video_min_rate {
+    my ($self, $value) = @_;
+
+    push(@{$self->_video}, ' -minrate ' . $value) if $self->_valid_prefix($value);
+}
+
+sub video_max_rate {
+    my ($self, $value) = @_;
+
+    push(@{$self->_video}, ' -maxrate ' . $value) if $self->_valid_prefix($value);
+}
+
+sub video_buf_size {
+    my ($self, $value) = @_;
+
+    push(@{$self->_video}, ' -bufsize ' . $value) if $self->_valid_prefix($value);
+}
+
 1;
